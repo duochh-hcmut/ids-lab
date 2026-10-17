@@ -289,7 +289,9 @@ awk -F'[\\[\\]{}]' '{print "| "$1" | "$3" | "$5" |"}' ./suricata/logs/fast.log
 ### Screnshots
 
 * Wireshark-localhost-open-pcap
-![Wireshark-localhost-open-pcap](media\wireshark-localhost-open-pcap.png)
+
+![Wireshark-localhost-open-pcap](./media/wireshark-localhost-open-pcap.png)
 
 * fast-log
-![fast-log](media\fast-log.png)
+
+![fast-log](./media/fast-log.png)
