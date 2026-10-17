@@ -319,7 +319,7 @@ awk -F'[\\[\\]{}]' '{print "| "$1" | "$3" | "$5" |"}' ./suricata/logs/fast.log
 
 ## Results
 
-### Wireshark GUI is handled via the container's browser portal (<http://localhost:3000>):
+### Wireshark GUI is handled via the container's browser portal (<http://localhost:3000>)
 
 1. Access GUI: Open <http://localhost:3000> in your host browser.
 2. Open Capture: Inside the Wireshark GUI top menu, click File $\rightarrow$ Open...
