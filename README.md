@@ -2,7 +2,7 @@
 
 ## scenario
 
-For your laboratory experiment and report analysis, here is a detailed breakdown of **two selected attack scenarios**: **Port Scanning** (Reconnaissance) and **Suspicious HTTP Traffic** (Web Application Attack).
+For the IDS laboratory experiment and report analysis, here is a detailed breakdown of **two selected attack scenarios**: **Port Scanning** (Reconnaissance) and **Suspicious HTTP Traffic** (Web Application Attack).
 
 ---
 
