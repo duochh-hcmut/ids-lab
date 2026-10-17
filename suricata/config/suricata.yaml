@@ -18,13 +18,11 @@ stats:
   interval: 10
 
 outputs:
-  # Text alert log
   - fast:
       enabled: yes
       filename: fast.log
       append: yes
 
-  # Structured JSON log (alerts and flow metadata)
   - eve-log:
       enabled: yes
       filetype: regular
@@ -34,9 +32,7 @@ outputs:
             payload: yes
             payload-printable: yes
             packet: yes
-            http-body: yes
-        - http:
-            extended: yes
+        - http
         - flow
 
 logging:
@@ -46,7 +42,7 @@ logging:
         enabled: yes
 
 af-packet:
-  - interface: docker0
+  - interface: eth0
     cluster-id: 99
     cluster-type: cluster_flow
     defrag: yes

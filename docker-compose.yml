@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 networks:
   lab_net:
@@ -16,7 +16,8 @@ services:
       lab_net:
         ipv4_address: 172.20.0.20
     ports:
-      - "8080:80"
+      - "8080:80"   # Web server port
+      - "3000:3000" # Mapped web UI port for Wireshark GUI
 
   # 2. Attacker Node (Kali Linux)
   attacker:
@@ -29,28 +30,44 @@ services:
         ipv4_address: 172.20.0.10
     command: /bin/bash
 
-  # 3. Suricata IDS Sensor Node
+  # 3. Suricata IDS Sensor Node (Shares target network stack)
   ids_sensor:
     image: jasonish/suricata:latest
     container_name: lab_ids
-    network_mode: "host"
+    network_mode: "service:target"
     cap_add:
       - NET_ADMIN
       - NET_RAW
+      - SYS_NICE
     volumes:
       - ./suricata/config/suricata.yaml:/etc/suricata/suricata.yaml
       - ./suricata/rules/local.rules:/var/lib/suricata/rules/local.rules
       - ./suricata/logs:/var/log/suricata
-    command: -i docker0 -c /etc/suricata/suricata.yaml
+    command: -i eth0 -c /etc/suricata/suricata.yaml -S /var/lib/suricata/rules/local.rules
 
-  # 4. PCAP Recorder (Full Network Traffic Evidence Capture)
+  # 4. PCAP Recorder (Shares target network stack)
   pcap_recorder:
     image: alpine:latest
     container_name: lab_pcap
-    network_mode: "host"
+    network_mode: "service:target"
     cap_add:
       - NET_ADMIN
       - NET_RAW
     volumes:
       - ./suricata/logs:/pcap
-    entrypoint: ["/bin/sh", "-c", "apk add --no-cache tcpdump && tcpdump -i docker0 -w /pcap/evidence.pcap"]
+    entrypoint: ["/bin/sh", "-c", "apk add --no-cache tcpdump && tcpdump -i eth0 -w /pcap/evidence.pcap"]
+
+  # 5. Web-based Wireshark GUI Node (Shares target network stack)
+  wireshark:
+    image: lscr.io/linuxserver/wireshark:latest
+    container_name: lab_wireshark
+    network_mode: "service:target"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./suricata/logs:/config/pcap
