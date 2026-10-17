@@ -285,3 +285,11 @@ awk -F'[\\[\\]{}]' '{print "| "$1" | "$3" | "$5" |"}' ./suricata/logs/fast.log
 10/17/2026-15:56:05.326224  [**] [1:1000001:2] LAB DETECT: Nmap Stealth SYN Scan Detected [**] [Classification: (null)] [Priority: 3] {TCP} 172.20.0.10:57928 -> 172.20.0.20:80
 10/17/2026-15:56:05.332210  [**] [1:1000002:2] LAB DETECT: Suspicious Admin Path Traversal Attempt [**] [Classification: (null)] [Priority: 3] {TCP} 172.20.0.10:57928 -> 172.20.0.20:80
 ```
+
+### Screnshots
+
+* Wireshark-localhost-open-pcap
+![Wireshark-localhost-open-pcap](media\wireshark-localhost-open-pcap.png)
+
+* fast-log
+![fast-log](media\fast-log.png)
