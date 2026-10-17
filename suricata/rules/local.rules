@@ -1,0 +1,5 @@
+# Scenario 1: Port Scanning (Nmap TCP Stealth SYN Scan)
+alert tcp any any -> 172.20.0.20 any (msg:"LAB DETECT: Nmap Stealth SYN Scan Detected"; flags:S; threshold: type threshold, track by_src, count 10, seconds 5; sid:1000001; rev:1;)
+
+# Scenario 2: Suspicious HTTP Path Traversal / Admin Access Attempt
+alert http any any -> 172.20.0.20 80 (msg:"LAB DETECT: Suspicious Admin Path Traversal Attempt"; flow:established,to_server; http.uri; content:"/admin"; sid:1000002; rev:1;)

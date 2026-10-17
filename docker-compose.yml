@@ -1,0 +1,56 @@
+version: '3.8'
+
+networks:
+  lab_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+services:
+  # 1. Target Endpoint (Victim Web Server)
+  target:
+    image: nginx:alpine
+    container_name: lab_target
+    networks:
+      lab_net:
+        ipv4_address: 172.20.0.20
+    ports:
+      - "8080:80"
+
+  # 2. Attacker Node (Kali Linux)
+  attacker:
+    image: kalilinux/kali-rolling
+    container_name: lab_attacker
+    tty: true
+    stdin_open: true
+    networks:
+      lab_net:
+        ipv4_address: 172.20.0.10
+    command: /bin/bash
+
+  # 3. Suricata IDS Sensor Node
+  ids_sensor:
+    image: jasonish/suricata:latest
+    container_name: lab_ids
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ./suricata/config/suricata.yaml:/etc/suricata/suricata.yaml
+      - ./suricata/rules/local.rules:/var/lib/suricata/rules/local.rules
+      - ./suricata/logs:/var/log/suricata
+    command: -i docker0 -c /etc/suricata/suricata.yaml
+
+  # 4. PCAP Recorder (Full Network Traffic Evidence Capture)
+  pcap_recorder:
+    image: alpine:latest
+    container_name: lab_pcap
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ./suricata/logs:/pcap
+    entrypoint: ["/bin/sh", "-c", "apk add --no-cache tcpdump && tcpdump -i docker0 -w /pcap/evidence.pcap"]

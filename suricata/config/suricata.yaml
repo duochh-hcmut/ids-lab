@@ -1,0 +1,52 @@
+%YAML 1.1
+---
+vars:
+  address-groups:
+    HOME_NET: "[172.20.0.0/16]"
+    EXTERNAL_NET: "!$HOME_NET"
+    HTTP_SERVERS: "[172.20.0.20]"
+
+  port-groups:
+    HTTP_PORTS: "80"
+
+default-rule-path: /var/lib/suricata/rules
+rule-files:
+  - local.rules
+
+stats:
+  enabled: yes
+  interval: 10
+
+outputs:
+  # Text alert log
+  - fast:
+      enabled: yes
+      filename: fast.log
+      append: yes
+
+  # Structured JSON log (alerts and flow metadata)
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            payload: yes
+            payload-printable: yes
+            packet: yes
+            http-body: yes
+        - http:
+            extended: yes
+        - flow
+
+logging:
+  default-log-level: notice
+  outputs:
+    - console:
+        enabled: yes
+
+af-packet:
+  - interface: docker0
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
