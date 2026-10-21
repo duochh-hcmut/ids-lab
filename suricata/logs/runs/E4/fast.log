@@ -1,0 +1,1 @@
+10/21/2026-17:38:35.185742  [**] [1:1000003:1] LAB DETECT: HTTP Admin Path Probe [**] [Classification: (null)] [Priority: 3] {TCP} 172.20.0.10:54418 -> 172.20.0.20:80

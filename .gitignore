@@ -219,7 +219,13 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# logs
+# Scratch sensor output. Evidence for each run is re-included below.
 *.log
 *.json
 *.pcap
+suricata/logs/*
+!suricata/logs/runs/
+!suricata/logs/runs/**
+!suricata/logs/runs/**/*.log
+!suricata/logs/runs/**/*.json
+!suricata/logs/runs/**/*.pcap

@@ -1,0 +1,8 @@
+Starting Nmap 7.991 ( https://nmap.org ) at 2026-10-21 17:36 +0000
+Nmap scan report for lab_target.ids-lab_lab_net (172.20.0.20)
+Host is up (0.00026s latency).
+All 40 scanned ports on lab_target.ids-lab_lab_net (172.20.0.20) are in ignored states.
+Not shown: 40 closed tcp ports (reset)
+MAC Address: B6:66:1E:06:6C:8D (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 88.28 seconds

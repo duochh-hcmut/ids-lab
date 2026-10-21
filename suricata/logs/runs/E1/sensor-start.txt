@@ -1,0 +1,6 @@
+Checking for capability sys_nice: yes
+Checking for capability net_admin: yes
+i: suricata: This is Suricata version 8.0.7 RELEASE running in SYSTEM mode
+i: stream-tcp: stream.reassembly.depth set to unlimited by default
+W: counters: stats are enabled but no loggers are active
+i: threads: Threads created -> W: 10 FM: 1 FR: 1   Engine started.

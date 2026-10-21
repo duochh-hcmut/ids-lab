@@ -28,7 +28,10 @@ services:
     networks:
       lab_net:
         ipv4_address: 172.20.0.10
-    command: /bin/bash
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    command: ["sleep", "infinity"]
 
   # 3. Suricata IDS Sensor Node (Shares target network stack)
   ids_sensor:
@@ -55,7 +58,7 @@ services:
       - NET_RAW
     volumes:
       - ./suricata/logs:/pcap
-    entrypoint: ["/bin/sh", "-c", "apk add --no-cache tcpdump && tcpdump -i eth0 -w /pcap/evidence.pcap"]
+    entrypoint: ["/bin/sh", "-c", "apk add --no-cache tcpdump && sleep infinity"]
 
   # 5. Web-based Wireshark GUI Node (Shares target network stack)
   wireshark:

@@ -1,0 +1,4 @@
+i: suricata: This is Suricata version 8.0.7 RELEASE running in SYSTEM mode
+i: stream-tcp: stream.reassembly.depth set to unlimited by default
+W: counters: stats are enabled but no loggers are active
+i: suricata: Configuration provided was successfully loaded. Exiting.

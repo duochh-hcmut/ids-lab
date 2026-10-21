@@ -1,0 +1,1 @@
+10/21/2026-17:39:04.698857  [wDrop] [**] [1:1000003:1] LAB DETECT: HTTP Admin Path Probe [**] [Classification: (null)] [Priority: 3] {TCP} 172.20.0.10:39190 -> 172.20.0.20:80
