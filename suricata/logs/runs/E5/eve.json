@@ -1,0 +1,1 @@
+{"timestamp":"2026-10-21T17:38:42.523930+0000","flow_id":841983526635773,"in_iface":"eth0","event_type":"http","src_ip":"172.20.0.10","src_port":54428,"dest_ip":"172.20.0.20","dest_port":80,"proto":"TCP","ip_v":4,"pkt_src":"wire/pcap","tx_id":0,"http":{"hostname":"172.20.0.20","url":"/../../etc/passwd","http_user_agent":"curl/8.22.0","http_content_type":"text/html"}}

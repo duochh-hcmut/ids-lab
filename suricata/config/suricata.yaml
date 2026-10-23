@@ -1,5 +1,7 @@
 %YAML 1.1
 ---
+default-log-dir: /var/log/suricata
+
 vars:
   address-groups:
     HOME_NET: "[172.20.0.0/16]"

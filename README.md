@@ -31,7 +31,7 @@ An IDS (like Suricata or Snort) inspects packet headers for TCP flags (`flags:S`
 * **Example Rule:**
 
 ```text
-alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"LAB DETECT: Nmap Stealth SYN Scan"; flags:S; threshold: type threshold, track by_src, count 20, seconds 5; sid:1000001; rev:1;)
+alert tcp 172.20.0.10 any -> 172.20.0.20 any (msg:"LAB DETECT: Nmap Stealth SYN Scan"; flags:S; threshold: type threshold, track by_src, count 20, seconds 5; sid:1000001; rev:3;)
 ```
 
 #### 1.5. Limitations Affecting Detection
@@ -75,7 +75,8 @@ The IDS performs Application Layer (Layer 7) inspection on TCP port 80/8080 traf
 * **Example Rule:**
 
 ```text
-alert http $EXTERNAL_NET any -> $HOME_NET 80 (msg:"LAB DETECT: Suspicious HTTP Path Scan"; flow:established,to_server; http.uri; content:"/admin"; sid:1000002; rev:1;)
+alert http 172.20.0.10 any -> 172.20.0.20 80 (msg:"LAB DETECT: HTTP Path Traversal"; flow:to_server; http.uri; content:"../"; sid:1000002; rev:3;)
+alert http 172.20.0.10 any -> 172.20.0.20 80 (msg:"LAB DETECT: HTTP Admin Path Probe"; flow:to_server; http.uri; content:"/admin"; sid:1000003; rev:1;)
 ```
 
 #### 2.5. Limitations Affecting Detection
@@ -217,6 +218,10 @@ graph TD
 
 ## Demo operation
 
+Teammates set up and re-run the matrix with [docs/reproducibility.md](docs/reproducibility.md). The command is `./scripts/run-all.sh`. Acceptance criteria are in `docs/experiment-acceptance-criteria.md`. The reference run is in `docs/experiment-results.md` and `suricata/logs/runs/`.
+
+The block below is the manual form of the same two scenarios. The log pasted under Results is the 17 October rev 2 run, before the threshold rule.
+
 ```sh
 chmod -R 777 ./suricata/logs
 docker compose up -d
@@ -265,6 +270,24 @@ awk -F'[\\[\\]{}]' '{print "| "$1" | "$3" | "$5" |"}' ./suricata/logs/fast.log
 ```
 
 ## Results
+
+### 22 Oct 2026 — E0–E8 (Suricata 8.0.7, rules rev 3)
+
+Full table, commands, and file paths: `docs/experiment-results.md`. Raw evidence: `suricata/logs/runs/`.
+
+| Run | Result |
+|---|---|
+| E1 `GET /` | No alert (true negative) |
+| E2 SYN scan, 1000 ports | SID `1000001` × 50 (true positive) |
+| E3 slow scan, 40 ports | No alert (false negative) |
+| E4 `GET /admin/config.php` | SID `1000003` × 1, HTTP 404 |
+| E5 `../` and E6 `%2E%2E` | No SID `1000002`, HTTP 400 (false negatives) |
+| E7 `GET /` with rev 2 rules | SID `1000001` on a normal homepage (false positive) |
+| E8 SID `1000003` set to `drop` | `fast.log` shows `wDrop`; Nginx still returned 404 |
+
+### 17 Oct 2026 — rev 2 preview
+
+The log below is the earlier run, before the threshold rule. A normal request to port 80 was labeled as a SYN scan.
 
 ### Wireshark GUI is handled via the container's browser portal (<http://localhost:3000>)
 

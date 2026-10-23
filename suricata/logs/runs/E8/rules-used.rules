@@ -1,0 +1,10 @@
+# Rev 3. Canonical copy: local.rules.rev3.
+# Attacker 172.20.0.10 is inside HOME_NET, so these rules pin both lab addresses.
+# threshold type "threshold" alerts on the Nth match inside the time window, then resets.
+# See docs/experiment-acceptance-criteria.md.
+
+alert tcp 172.20.0.10 any -> 172.20.0.20 any (msg:"LAB DETECT: Nmap Stealth SYN Scan"; flags:S; threshold: type threshold, track by_src, count 20, seconds 5; sid:1000001; rev:3;)
+
+alert http 172.20.0.10 any -> 172.20.0.20 80 (msg:"LAB DETECT: HTTP Path Traversal"; flow:to_server; http.uri; content:"../"; sid:1000002; rev:3;)
+
+drop http 172.20.0.10 any -> 172.20.0.20 80 (msg:"LAB DETECT: HTTP Admin Path Probe"; flow:to_server; http.uri; content:"/admin"; sid:1000003; rev:1;)
